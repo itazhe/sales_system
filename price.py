@@ -8,6 +8,7 @@ conn = pymysql.connect("127.0.0.1", "azhe", "602661651nizhan$", "prdb")
 # 获取一个游标对象(Cursor类)，用于执行SQL语句
 cur = conn.cursor()
 
+
 def goods_list():
     '''
     函数内容：商品列表
@@ -34,30 +35,47 @@ def goods_list():
 
 
 list1 = []
+list2 = []
+sum = 0
+m = 0
 def shopping_cart(num2):
     '''
     函数内容：购物车
     '''
+    global sum
+    global m
+
+
     cur.execute("select * from goods where barcode=%s", goods_barcode)
     rows = cur.fetchall()
     print("=" * 75)
-    print("%s%13s%20s%10s%10s%10s" % ("ID", "条码", "商品名称", "单价","数量", "小计"))
+    print("%s%13s%20s%10s%10s%10s" % ("ID", "条码", "商品名称", "单价", "数量", "小计"))
     print("-" * 75)
     if num2 == 1:
         list1.append(list(rows[0]))
+ 
+        while True:
+            ID = list1[m][0]
+            barcode = list1[m][1]
+            pname = list1[m][2]
+            price = list1[m][3]
+            sub = float(price) * goods_number
 
-    n = 0
-    sum = 0
-    while n < len(list1):
-        ID = list1[n][0]
-        barcode = list1[n][1]
-        pname = list1[n][2]
-        price = list1[n][3]
-        sub = float(price) * goods_number
-            
-        print("%s%15s%17s%12s%12s%12s" % (ID, barcode, pname, price, goods_number, sub))
-        n += 1
-        sum += sub
+            list2.append("%s%15s%17s%12s%12s%12s" % (ID, barcode, pname, price, goods_number, sub))
+            m += 1
+            break
+
+        n = 0
+        while n < len(list2):
+            print(list2[n])
+            n += 1
+        sum += sub 
+    else:
+        n = 0
+        while n < len(list2):
+            print(list2[n])
+            n += 1
+        
     print("-" * 75)
     print(" " * 67 + "总计：%s" % sum)
     print("=" * 75)
@@ -80,16 +98,17 @@ def system_main():
             goods_barcode = int(input("请输入商品的条码："))
             goods_number = int(input("请输入购买数量："))
             shopping_cart(1)
-        if n == "e":
+        elif n == "e":
             goods_ID = int(input("请输入需要修改的商品ID："))
-            goods_number = int(input("请输入新的购买数量："))
-        if n == "d":
+            goods_number2 = int(input("请输入新的购买数量："))
+            # shopping_cart(1, goods_number2)
+        elif n == "d":
             goods_del = int(input("请输入要删除的商品ID："))
-        if n == "p":
+        elif n == "p":
             shopping_cart(2)
             print("欢迎下次光临!!!")
             break
-        if n == "r":
+        elif n == "r":
             goods_list()  
             print('''欢迎进入超市后台管理平台
 后台操作指令：
@@ -105,6 +124,8 @@ def system_main():
                     print("商品添加成功")
                 else:
                     print("商品添加失败")
+        else:
+            print("请输入正确的操作指令")
 
 
 def user_login():
