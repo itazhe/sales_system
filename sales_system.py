@@ -52,6 +52,7 @@ def shopping_cart(num2):
     print("%s%13s%20s%10s%10s%10s" % ("ID", "条码", "商品名称", "单价", "数量", "小计"))
     print("-" * 75)
     if num2 == 1:
+        # 购物车
         list1.append(list(rows[0]))
  
         while True:
@@ -70,16 +71,35 @@ def shopping_cart(num2):
             print(list2[n])
             n += 1
         sum += sub 
-    else:
+    elif num2 == 2:
+        # 结算 购物车列表
         n = 0
         while n < len(list2):
             print(list2[n])
             n += 1
-        
+    elif num2 ==3:
+        # 删除购物车中指定商品
+        n = 0
+        while n < len(list2):
+            if list2[n][:4] == goods_del:
+                list2.remove(list2[n])
+            # print(list2[n])
+            try:
+                print(list2[n])
+            except:
+                pass
+            n += 1
+        n = 0
+        sum = 0
+        while n < len(list2):
+            x = list2[n].split(" ")[-1]
+            sum += float(x)
+            n += 1
+
     print("-" * 75)
     print(" " * 67 + "总计：%s" % sum)
     print("=" * 75)
-
+    
 
 def system_main():
     '''
@@ -87,6 +107,7 @@ def system_main():
     '''
     global goods_barcode
     global goods_number
+    global goods_del
     goods_list()
 
     while True:
@@ -103,7 +124,8 @@ def system_main():
             goods_number2 = int(input("请输入新的购买数量："))
             # shopping_cart(1, goods_number2)
         elif n == "d":
-            goods_del = int(input("请输入要删除的商品ID："))
+            goods_del = input("请输入要删除的商品ID：")
+            shopping_cart(3)
         elif n == "p":
             shopping_cart(2)
             print("欢迎下次光临!!!")
