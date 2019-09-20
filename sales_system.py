@@ -95,6 +95,37 @@ def shopping_cart(num2):
             x = list2[n].split(" ")[-1]
             sum += float(x)
             n += 1
+    elif num2 == 4:
+        '''
+        函数内容：修改商品
+        '''
+        n = 0
+
+        while n < len(list2):
+            if int(list2[n][:4]) == goods_ID:
+                list2.remove(list2[n])
+                m = 0
+                while m < len(list1):
+                    if list1[m][0] == goods_ID:
+                        ID = list1[m][0]
+                        barcode = list1[m][1]
+                        pname = list1[m][2]
+                        price = list1[m][3]
+                        sub = float(price) * goods_number
+
+                        list2.append("%s%15s%17s%12s%12s%12s" % (ID, barcode, pname, price, goods_number, sub))
+                    m += 1
+            try:
+                print(list2[n])
+            except:
+                pass
+            n += 1
+        n = 0
+        sum = 0
+        while n < len(list2):
+            x = list2[n].split(" ")[-1]
+            sum += float(x)
+            n += 1
 
     print("-" * 75)
     print(" " * 67 + "总计：%s" % sum)
@@ -108,6 +139,8 @@ def system_main():
     global goods_barcode
     global goods_number
     global goods_del
+    global goods_ID
+    
     goods_list()
 
     while True:
@@ -121,8 +154,8 @@ def system_main():
             shopping_cart(1)
         elif n == "e":
             goods_ID = int(input("请输入需要修改的商品ID："))
-            goods_number2 = int(input("请输入新的购买数量："))
-            # shopping_cart(1, goods_number2)
+            goods_number = int(input("请输入新的购买数量："))
+            shopping_cart(4)
         elif n == "d":
             goods_del = input("请输入要删除的商品ID：")
             shopping_cart(3)
