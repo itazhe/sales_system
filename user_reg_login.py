@@ -291,6 +291,68 @@ def goods_infor(barcode, pname, price, pnumber):
     return bool(r)
 
 
+def mod_goods_infor(barcode, pname, price, pnumber):
+    '''
+    函数功能：修改数据库商品信息
+    函数描述：
+    barcode 条码
+    pname 商品名称
+    price 单价
+    pnumber 商品数量
+    返回值：成功返回True，失败返回False
+    '''
+    # 连接数据库，conn为Connection对象
+    conn = pymysql.connect(host=conf["db_server_ip"], port=conf["db_server_port"], user=conf["db_user"], passwd=conf["db_password"], db=conf["db_name"], charset="utf8")
+
+    try:
+        with conn.cursor() as cur:  # 获取一个游标对象(Cursor类)，用于执行SQL语句
+            # 执行任意支持的SQL语句
+            cur.execute("update goods set pname='%s' where barcode='%s'" % (pname, barcode))
+            r = cur.rowcount
+            conn.commit()
+            cur.execute("update goods set price='%s' where barcode='%s'" % (price, barcode))
+            r = cur.rowcount
+            conn.commit()
+            cur.execute("update goods set pnumber='%s' where barcode='%s'" % (pnumber, barcode))
+            r = cur.rowcount
+            conn.commit()
+    except:
+        r = 0
+    finally:
+        # 关闭数据库连接
+        conn.close()      
+
+    return bool(r)
+
+
+def del_goods_infor(barcode):
+    '''
+    函数功能：删除商品信息
+    函数描述：
+    barcode 条码
+    pname 商品名称
+    price 单价
+    pnumber 商品数量
+    返回值：成功返回True，失败返回False
+    '''
+    # 连接数据库，conn为Connection对象
+    conn = pymysql.connect(host=conf["db_server_ip"], port=conf["db_server_port"], user=conf["db_user"], passwd=conf["db_password"], db=conf["db_name"], charset="utf8")
+
+    try:
+        with conn.cursor() as cur:  # 获取一个游标对象(Cursor类)，用于执行SQL语句
+            # 执行任意支持的SQL语句
+            cur.execute("delete from goods where barcode=%s" % barcode)
+            r = cur.rowcount
+            conn.commit()
+    except:
+        r = 0
+    finally:
+        # 关闭数据库连接
+        conn.close()      
+
+    return bool(r)
+
+
 def user_center(user_name):
     print("%s，欢迎你使用本系统！" % user_name)
     print("\n操作提示：")

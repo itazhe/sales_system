@@ -162,12 +162,13 @@ def system_main():
         elif n == "p":
             shopping_cart(2)
             print("欢迎下次光临!!!")
+            conn.close()
             break
         elif n == "r":
             goods_list()  
             print('''欢迎进入超市后台管理平台
 后台操作指令：
-    添加商品(a)  修改商品(e)  删除商品(d)  退出(q)
+    添加商品(a)  修改商品(e)  下架商品(d)  退出(q)
             ''')
             n = input(">")
             if n == "a":
@@ -176,11 +177,27 @@ def system_main():
                 goods_price = input("请输入商品单价：")
                 goods_number = input("请输入商品数量：")
                 if user_reg_login.goods_infor(goods_barcode, goods_name, goods_price, goods_number):
-                    print("商品添加成功")
+                    print("商品添加成功,重启系统生效！")
                 else:
                     print("商品添加失败")
+            if n == "e":
+                goods_barcode = int(input("请输入商品的条码："))
+                goods_name = input("请输入修改后商品名称：")
+                goods_price = input("请输入修改后商品单价：")
+                goods_number = input("请输入修改后商品数量：")
+                if user_reg_login.mod_goods_infor(goods_barcode, goods_name, goods_price, goods_number):
+                    print("商品修改成功,重启系统生效！")
+                else:
+                    print("商品修改失败")
+            if n == "d":
+                goods_barcode = int(input("请输入下架商品的条码："))
+                if user_reg_login.del_goods_infor(goods_barcode):
+                    print("商品下架成功,重启系统生效！")
+                else:
+                    print("商品下架失败")
+
         else:
-            print("请输入正确的操作指令")
+            print("请输入正确的操作指令!!!")
 
 
 def user_login():
